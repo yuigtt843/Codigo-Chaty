@@ -6,43 +6,52 @@ if len(dpi)>13:
     print(" NO VALIDO ")
 if len(dpi)==13:
     print("Valido")
-    print("Existen los partidos:")
-    print("Partido Rojo")
-    print("Partido Azul")
+    print("Existen los partidos A) UNE, B) VALOR:")
     eleccion_presidencial= input("Hacia que partido va dirigido su voto? : ")
-    if eleccion_presidencial== "Rojo":
-        print("Su voto ha sido hacia el Partido Rojo")
+    
 
-    elif eleccion_presidencial== "Azul":
-        print("Su voto ha sido hacia el Partido Azul")
+    if eleccion_presidencial !="A" and eleccion_presidencial!="B":
+        print("Voto no Valido, intente de nuevo")
+    else:
+        if eleccion_presidencial== "A":
+            print("Su voto ha sido hacia el Partido UNE")
 
-    print(" ")
-    print("Los partidos para la Alcandia de la Antigua Guatemala son :")
-    print("Partido Rojol")
-    print("Partido Azul")
-    print("Partido Verde")
-    print("Partido Naranja")
-    eleccion_alcaldia= input("Hacia que partido va dirigido su voto para la Alcandia de la Antigua Guatemala : ")
+        if eleccion_presidencial== "B":
+            print("Su voto ha sido hacia el Partido VALOR")
 
-    if eleccion_alcaldia== "Rojo":
-        print("Su voto ha sido hacia el Partido Rojo : ")
+
+    
+
+        eleccion_alcaldia=" "
+        print(" ")
+        print("Los partidos para la Alcandia de la Antigua Guatemala son C,D,E,F:")
+        eleccion_alcaldia= input("Hacia que partido va dirigido su voto? ")
         
-    if eleccion_alcaldia== "Verde":
-        print("Su voto ha sido hacia el Partido Verde : ")
+        if eleccion_alcaldia!="C" and eleccion_alcaldia!="D" and eleccion_alcaldia!="E" and eleccion_alcaldia!="F":
+            print("Su voto es invalido")
+            eleccion_alcaldia="voto nulo"
 
-    if eleccion_alcaldia== "Naranja":
-        print("Su voto ha sido hacia el Partido Naranja : ")
+        if eleccion_alcaldia== "C":
+            print("Su voto fue hacia el partido VALOR")
 
-    if eleccion_alcaldia== "Azul":
-        print("Su voto ha sido hacia el Partido Azul : ")
+        if eleccion_alcaldia=="D":
+            print("Su voto fue hacia el partido UNE")
 
-    ultima_confirmacion= print("Desea confirmar sus votos? Chi?, Ño?")
-    ultima_confirmacion= input("")
-    if ultima_confirmacion== "Chi":
-        print("Sus votos han sido acumulados")
+        if eleccion_alcaldia=="E":
+            print("Su voto fue hacia el partido PAN")
 
-    if ultima_confirmacion== "Ño":
-        print("Sus votos no han sido acumulados, intente de nuevo")
+        if eleccion_alcaldia=="F":
+            print("Su voto fue hacia el partido VAMOS")   
+ 
+        ultima_confirmacion= input("Desea confirmar sus votos? Chi?, Ño? ")
+        if ultima_confirmacion== "Chi":
+            print("Sus votos han sido acumulados")
 
-    resumen= print( "Partido" ,eleccion_presidencial)
-    resumen= print( "Partido" ,eleccion_alcaldia)
+        if ultima_confirmacion== "Ño":
+            print("Sus votos no han sido acumulados, intente de nuevo, baboso")
+        
+        if ultima_confirmacion!="Chi"and eleccion_alcaldia!="Ño":
+            print("No se ha confirmado nada, BABOSO")
+
+        resumen= print( "Partido" ,eleccion_presidencial)
+        resumen= print( "Partido" ,eleccion_alcaldia)
