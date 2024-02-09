@@ -1,0 +1,69 @@
+
+dpi=(input("Ingrese su dpi : "))
+if len(dpi)<13:
+    print(" NO VALIDO ")
+if len(dpi)>13:
+    print(" NO VALIDO ")
+if len(dpi)==13:
+    print("Valido")
+    print("Existen los partidos A) UNE, B) VALOR:")
+    eleccion_presidencial= input("Hacia que partido va dirigido su voto? : ")
+    
+
+    if eleccion_presidencial !="A" and eleccion_presidencial!="B":
+        print("Voto no Valido, intente de nuevo")
+    else:
+        if eleccion_presidencial== "A":
+            print("Su voto ha sido hacia el Partido UNE")
+
+        if eleccion_presidencial== "B":
+            print("Su voto ha sido hacia el Partido VALOR")
+
+
+    
+
+        eleccion_alcaldia=" "
+        print(" ")
+        print("Los partidos para la Alcandia de la Antigua Guatemala son C,D,E,F:")
+        eleccion_alcaldia= input("Hacia que partido va dirigido su voto? ")
+        
+        if eleccion_alcaldia!="C" and eleccion_alcaldia!="D" and eleccion_alcaldia!="E" and eleccion_alcaldia!="F":
+            print("Su voto es invalido")
+            eleccion_alcaldia="voto nulo"
+
+        else:
+            if eleccion_alcaldia== "C":
+                print("Su voto fue hacia el partido VALOR")
+
+            if eleccion_alcaldia=="D":
+                print("Su voto fue hacia el partido UNE")
+
+            if eleccion_alcaldia=="E":
+                print("Su voto fue hacia el partido PAN")
+
+            if eleccion_alcaldia=="F":
+                print("Su voto fue hacia el partido VAMOS")   
+    
+            ultima_confirmacion= input("Desea confirmar sus votos? Chi?, Ño? ") 
+            
+            if ultima_confirmacion!="Chi"and eleccion_alcaldia!="Ño":
+                print("No se ha confirmado nada, BABOSO")
+            else:
+                if ultima_confirmacion== "Chi":
+                    print("Sus votos han sido acumulados")
+
+                if ultima_confirmacion== "Ño":
+                    print("Sus votos no han sido acumulados, intente de nuevo, baboso")
+
+                resumen= print( "Partido" ,eleccion_presidencial)
+                resumen= print( "Partido" ,eleccion_alcaldia)
+                ultimo_paso=" " 
+                ultimo_paso=input("Sus votos son correctos? CHI HOMBRE O ÑO: ") 
+                if ultimo_paso!="CHI HOMBRE"and ultimo_paso!="Aaa nel vos...":
+                    print(" No se confirmo nada, baboso")
+                    
+                else:
+                    if ultimo_paso=="CHI HOMBRE":
+                        print("Ok... quedo registrado todo, feliz día")
+                    if ultimo_paso=="Aaa nel vos...":
+                        print("No quedo registrado nada ")
