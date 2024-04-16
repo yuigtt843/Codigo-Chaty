@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <tittle>Pagina con Estrutua Semantica Avanzada</tittle>
+    <style>
+        /*Estilos basicos para mejorar la visulizacion*/ 
+        header, nav, section, article, aside, footer {
+            border: 1px solid grey;
+            margin: 10px;
+            padding: 10px;
+
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+
+        }
+        h1,
+        h2,
+        h3 {
+            color: #0056b3
+        }
+
+        a {
+            color: #0056b3;
+            text-align: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            background-color: #333;
+        
+        }
+        nav li {
+            display: inline;
+            margin-right: 20px;
+
+        }
+        
+        nav a {
+            color: white;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color:  #ffcc00;
+        }
+        section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        article {
+            margin-bottom: 20px;
+
+        }
+        article:last-child{
+            margin-bottom: 0;
+        }
+    </style>
+<head>
+<body>
+
+<header>
+    <h1>Nombre de Mi Sitio Web</h1>
+    <p>Descripcion breve del sitio</p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#sobrenosotros">Sobre Nosotros</a></li>
+        <li><a href="#productos">Productos</a></li>
+        <li><a href="#contacto">contacto</a></li>
+    </ul>
+</nav>
+
+<section id="inicio">
+    <h2>Bienvenidos a Nuetro Sitio</h2>
+    <p>Esta es la introduccion a nuestro sitio web y lo que ofrecemos </p>
+</section>
+
+<section id="sobrenostros">
+    <h2>Sobre Nosotros</h2>
+    <article>
+        <h3>Nuestra Historia</h3>
+        <p>Informacion sobre el equipo detras de la compañoa.</p>
+    </article>
+</section>
+
+<section id="Productos">
+    <h2>Nuestros Productos</h2>
+    <article>
+        <h3> Producto 1</h3>
+        <p>Descripcion de este producto</p>
+    </article>
+</section>
+
+
+<section id="contacto">
+    <h2>Noticias Recientes</h2>
+    <p>Informacion sobre como contactarnos.</p>
+</section>
+
+<aside>
+    <h2>Noticias Recientes</h2>
+    <p>Algunas noticas breves o enlaces a blogs</p>
+</aside>
+
+<footer>
+    <p>Derechos de autor  Nombre de mi sitio web</p>
+</footer>
+
+</head>
+</html>
