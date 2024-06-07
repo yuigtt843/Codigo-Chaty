@@ -19,14 +19,20 @@ GREEN = (0, 255, 0)
 # Fuentes
 font = pygame.font.Font(None, 36)
 
-# Preguntas y respuestas
-questions = [
-    {"question": "¿Capital de Francia?", "options": ["3", "4", "5"], "answer": 1},
-    {"question": "¿2 + 2?", "options": ["París", "Londres", "Madrid"], "answer": 1},
-    {"question": "¿Color del cielo?", "options": ["Verde", "Azul", "Rojo"], "answer": 1},
-    {"question": "¿Capital de España?", "options": ["Lisboa", "Madrid", "Roma"], "answer": 1},
-    {"question": "¿5 * 6?", "options": ["11", "30", "25"], "answer": 1}
-]
+# Preguntas y respuestas usando condiciones
+def get_question_and_answers(index):
+    if index == 0:
+        return "¿Capital de Francia?", ["París", "Londres", "Madrid"], 0
+    elif index == 1:
+        return "¿2 + 2?", ["3", "4", "5"], 1
+    elif index == 2:
+        return "¿Color del cielo?", ["Verde", "Azul", "Rojo"], 1
+    elif index == 3:
+        return "¿Capital de España?", ["Lisboa", "Madrid", "Roma"], 1
+    elif index == 4:
+        return "¿5 * 6?", ["11", "30", "25"], 1
+    else:
+        return None, None, None
 
 current_question = 0
 
@@ -54,16 +60,16 @@ def reset_game():
 # Function to generate a new obstacle
 def generate_obstacle():
     global obstacles, current_question
-    if current_question < len(questions):
-        correct_option = questions[current_question]["answer"]
-        options = questions[current_question]["options"]
+    question, options, correct_option = get_question_and_answers(current_question)
+    if question is not None:
         obstacle_y = random.randint(100, SCREEN_HEIGHT - obstacle_gap - 100)
+        option_height = SCREEN_HEIGHT // 3
         obstacles.append({
             "x": SCREEN_WIDTH,
-            "y": [0, obstacle_y + obstacle_gap // 2, SCREEN_HEIGHT],
+            "y": [0, option_height, option_height * 2],
             "options": options,
             "correct": correct_option,
-            "limit": obstacle_y + obstacle_gap // 2
+            "limit": option_height * correct_option + option_height // 2
         })
         current_question += 1
 
@@ -106,10 +112,10 @@ def main():
             # Draw the obstacle with limits
             for i in range(3):
                 color = GREY
-                height = obstacle["y"][1] if i == 0 else SCREEN_HEIGHT - obstacle["y"][1] if i == 2 else SCREEN_HEIGHT
+                height = SCREEN_HEIGHT // 3
                 pygame.draw.rect(screen, color, (obstacle["x"], obstacle["y"][i], obstacle_width, height))
                 # Draw the options
-                draw_text(obstacle["options"][i], font, BLACK, screen, obstacle["x"] + 10, obstacle["y"][i] + 10)
+                draw_text(obstacle["options"][i], font, BLACK, screen, obstacle["x"] + 10, obstacle["y"][i] + height // 2 - 18)
 
             # Mark the passage limit
             pygame.draw.line(screen, GREEN, (obstacle["x"], obstacle["limit"]), (obstacle["x"] + obstacle_width, obstacle["limit"]), 5)
@@ -120,8 +126,9 @@ def main():
 
         pygame.draw.rect(screen, BLACK, (bird_x, bird_y, bird_size, bird_size))
 
-        if current_question < len(questions):
-            draw_text(questions[current_question]["question"], font, BLACK, screen, 20, 20)
+        if current_question < 5:
+            question, _, _ = get_question_and_answers(current_question)
+            draw_text(question, font, BLACK, screen, 20, 20)
 
         pygame.display.update()
         clock.tick(30)
