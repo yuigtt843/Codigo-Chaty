@@ -1,137 +1,190 @@
 import pygame
 import sys
-import random
 
 pygame.init()
-
-# Configuración de la pantalla
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 800
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Flappy Quiz Bird")
+pygame.display.set_caption("Historia de Johnny")
 
-# Colores
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-GREY = (200, 200, 200)
-GREEN = (0, 255, 0)
 
-# Fuentes
 font = pygame.font.Font(None, 36)
 
-# Preguntas y respuestas usando condiciones
-def get_question_and_answers(index):
-    if index == 0:
-        return "¿Capital de Francia?", ["París", "Londres", "Madrid"], 0
-    elif index == 1:
-        return "¿2 + 2?", ["3", "4", "5"], 1
-    elif index == 2:
-        return "¿Color del cielo?", ["Verde", "Azul", "Rojo"], 1
-    elif index == 3:
-        return "¿Capital de España?", ["Lisboa", "Madrid", "Roma"], 1
-    elif index == 4:
-        return "¿5 * 6?", ["11", "30", "25"], 1
-    else:
-        return None, None, None
 
-current_question = 0
+def load_and_scale_image(path, width, height):
+    image = pygame.image.load(path)
+    return pygame.transform.scale(image, (width, height))
 
-# Bird
-bird_size = 20
-bird_x = 100
-bird_y = SCREEN_HEIGHT // 2
-bird_y_velocity = 0
+images = {
+    "start": load_and_scale_image("start.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "home": load_and_scale_image("home.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "steal": load_and_scale_image("steal.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "wake_up": load_and_scale_image("wake_up.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "watch_series": load_and_scale_image("watch_series.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "take_pill": load_and_scale_image("take_pill.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "confident": load_and_scale_image("confident.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "cheat": load_and_scale_image("cheat.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "wrong_answer": load_and_scale_image("wrong_answer.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "correct_answer": load_and_scale_image("correct_answer.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "tell_mother": load_and_scale_image("tell_mother.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "stay_silent": load_and_scale_image("stay_silent.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "run_away": load_and_scale_image("run_away.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+    "be_honest": load_and_scale_image("be_honest.jpg", SCREEN_WIDTH, SCREEN_HEIGHT),
+}
 
-# Obstacles
-obstacle_width = 100
-obstacle_gap = 175
-obstacle_velocity = 4
-obstacles = []
+def draw_text(surface, text, font, color, x, y, max_width):
+    words = [word.split(' ') for word in text.splitlines()]
+    space = font.size(' ')[0]
+    max_width, max_height = surface.get_size()
+    x_offset, y_offset = x, y
+    for line in words:
+        for word in line:
+            word_surface = font.render(word, True, color)
+            word_width, word_height = word_surface.get_size()
+            if x_offset + word_width >= max_width:
+                x_offset = x
+                y_offset += word_height
+            surface.blit(word_surface, (x_offset, y_offset))
+            x_offset += word_width + space
+        x_offset = x
+        y_offset += word_height
 
-# Function to reset the game
-def reset_game():
-    global bird_y, bird_y_velocity, obstacles, current_question
-    bird_y = SCREEN_HEIGHT // 2
-    bird_y_velocity = 0
-    obstacles = []
-    current_question = 0
-    generate_obstacle()
+history = {
+    "start": {
+        "text": "Un día Johnny jugando y corretiando por el mercado central de su pueblo, "
+                "en un momento de su día Johnny tenía demasiada hambre pero no tenía dinero para comprar algo de comer, "
+                "hasta que vio unas deliciosas donas que vendía un señor.\n\n"
+                "1. Johnny prefiere mejor irse a su casa y esperar a ver qué preparó su madre de comer.\n"
+                "2. Johnny decide robar una dona y correr y tratar de no ser atrapado.",
+        "choices": {
+            "1": "home",
+            "2": "steal"
+        }
+    },
+    "home": {
+        "text": "Johnny llega a su casa y su madre lo está esperando con una gran olla de delicioso Pepian.\n\n"
+                "Johnny después de comerse toda la olla de Pepian decide tomar una siesta. Presiona 1 o 2 para continuar con la historia",
+        "choices": {
+            "1": "wake_up",
+            "2": "wake_up"
+        }
+    },
+    "steal": {
+        "text": "Atrapan a Johnny y lo golpean y lo dejan tirado en el piso golpeado.\n\n"
+                "La madre de Johnny lo estaba esperando con un delicioso Pepian pero al verlo golpeado y todo ella también lo golpea.\n\n"
+                "Johnny se queda dormido de lo cansado que estaba.",
+        "choices": {
+            "1": "wake_up",
+            "2": "wake_up"
+        }
+    },
+    "wake_up": {
+        "text": "Johnny se despierta a las 3 am pero se le fue el sueño pero recuerda que tiene que ir a la escuela esa misma mañana.\n\n"
+                "1. Johnny decide poner su serie y ver los últimos capítulos que le quedaban.\n"
+                "2. Johnny decide tomar una pasinerva para lograr retomar el sueño y relajarse y así volverse a dormir.",
+        "choices": {
+            "1": "watch_series",
+            "2": "take_pill"
+        }
+    },
+    "watch_series": {
+        "text": "Johnny se quedó dormido y el bus que lo pasa a traer todas las mañanas lo dejó.\n\n"
+                "Johnny llega a la escuela en una camioneta Esmeralda y ve a todos estresados por el parcial que va a pasar la maestra de Matemáticas.\n\n"
+                "1. Johnny decide confiar en sus conocimientos y estar preparado para todo.\n"
+                "2. Johnny decide hacer un chivo para el parcial porque no se recuerda de nada.",
+        "choices": {
+            "1": "confident",
+            "2": "cheat"
+        }
+    },
+    "take_pill": {
+        "text": "Johnny se despierta con una hora de anticipación y se recuerda de que tiene parcial de matemáticas hoy y mientras va en el bus que lo pasa a traer en la mañana se pone a estudiar y llega listo al examen.\n\n"
+                "En una pregunta Bonus del examen que decía que si la respuesta era correcta le podían aumentar su Zona a 60 puntos, la pregunta era: ¿Cuál es el nombre de la perrita de la maestra?\n\n"
+                "1. La perrita se llama Abril.\n"
+                "2. La perrita se llama Nicky.",
+        "choices": {
+            "1": "wrong_answer",
+            "2": "correct_answer"
+        }
+    },
+    "confident": {
+        "text": "Johnny ve al profesor y él se acerca y le dice que le cae muy bien y le regaló varias respuestas del examen.\n\nFIN",
+        "choices": {}
+    },
+    "cheat": {
+        "text": "El profesor vio a Johnny con el chivo y le quitó el examen y ahora solo le queda a Johnny depender de la zona y las tareas que entregó.\n\n"
+                "Johnny se encuentra a su madre al final del examen y él sabe que sacó 0.\n\n"
+                "1. Johnny decide correr a la montaña para que su madre no lo regañe.\n"
+                "2. Johnny decide mostrarle el examen a su madre y serle honesto.",
+        "choices": {
+            "1": "run_away",
+            "2": "be_honest"
+        }
+    },
+    "wrong_answer": {
+        "text": "La respuesta es incorrecta y Johnny no se pudo ganar los puntos extras.\n\n"
+                "Johnny llega a su casa y piensa en decirle a su madre o no de lo que pasó hoy.\n\n"
+                "1. Johnny le cuenta a su madre que le fue bien en el examen.\n"
+                "2. Johnny decide quedarse callado e irse a su cuarto, se toma una pasinerva y se queda dormido.",
+        "choices": {
+            "1": "tell_mother",
+            "2": "stay_silent"
+        }
+    },
+    "correct_answer": {
+        "text": "La respuesta es correcta y Johnny tiene la mejor nota de su clase.\n\n"
+                "Johnny llega a su casa y piensa en decirle a su madre o no de lo que pasó hoy.\n\n"
+                "1. Johnny le cuenta a su madre que le fue bien en el examen.\n"
+                "2. Johnny decide quedarse callado e irse a su cuarto, se toma una pasinerva y se queda dormido.",
+        "choices": {
+            "1": "tell_mother",
+            "2": "stay_silent"
+        }
+    },
+    "tell_mother": {
+        "text": "Su madre lo felicita y le dice que lo quiere invitar a comer al lugar que más le gusta que son los Tacos del Yorch.\n\nFIN",
+        "choices": {}
+    },
+    "stay_silent": {
+        "text": "Johnny decide quedarse callado e irse a su cuarto, se toma una pasinerva y se queda dormido.\n\nFIN",
+        "choices": {}
+    },
+    "run_away": {
+        "text": "Johnny tropieza con una roca y se cae y se golpea la cabeza y queda desmayado. Después de varias horas desmayado se despierta en un lugar que no conoce y empieza una nueva vida como un superviviente en la selva.\n\nFIN",
+        "choices": {}
+    },
+    "be_honest": {
+        "text": "Su madre le dice que no se preocupe y le da un abrazo y le dice que lo ama mucho. Después su madre lo lleva a comer pepian al Comedor La Bendición cerca de su casa y son felices.\n\nFIN",
+        "choices": {},
+        "color": BLACK
+    }
+}
 
-# Function to generate a new obstacle
-def generate_obstacle():
-    global obstacles, current_question
-    question, options, correct_option = get_question_and_answers(current_question)
-    if question is not None:
-        obstacle_y = random.randint(100, SCREEN_HEIGHT - obstacle_gap - 100)
-        option_height = SCREEN_HEIGHT // 3
-        obstacles.append({
-            "x": SCREEN_WIDTH,
-            "y": [0, option_height, option_height * 2],
-            "options": options,
-            "correct": correct_option,
-            "limit": option_height * correct_option + option_height // 2
-        })
-        current_question += 1
-
-def draw_text(text, font, color, surface, x, y):
-    textobj = font.render(text, 1, color)
-    textrect = textobj.get_rect()
-    textrect.topleft = (x, y)
-    surface.blit(textobj, textrect)
+current_scene = "start"
 
 def main():
-    global bird_y, bird_y_velocity, obstacles
-
+    global current_scene
     clock = pygame.time.Clock()
-    reset_game()
+    running = True
 
-    while True:
-        screen.fill(WHITE)
-
+    while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    bird_y_velocity = -8
+                if event.key == pygame.K_1 and "1" in history[current_scene]["choices"]:
+                    current_scene = history[current_scene]["choices"]["1"]
+                if event.key == pygame.K_2 and "2" in history[current_scene]["choices"]:
+                    current_scene = history[current_scene]["choices"]["2"]
 
-        bird_y_velocity += 1
-        bird_y += bird_y_velocity
-
-        if bird_y > SCREEN_HEIGHT or bird_y < 0:
-            reset_game()
-
-        for obstacle in obstacles:
-            obstacle["x"] -= obstacle_velocity
-
-            if obstacle["x"] < -obstacle_width:
-                obstacles.remove(obstacle)
-                generate_obstacle()
-
-            # Draw the obstacle with limits
-            for i in range(3):
-                color = GREY
-                height = SCREEN_HEIGHT // 3
-                pygame.draw.rect(screen, color, (obstacle["x"], obstacle["y"][i], obstacle_width, height))
-                # Draw the options
-                draw_text(obstacle["options"][i], font, BLACK, screen, obstacle["x"] + 10, obstacle["y"][i] + height // 2 - 18)
-
-            # Mark the passage limit
-            pygame.draw.line(screen, GREEN, (obstacle["x"], obstacle["limit"]), (obstacle["x"] + obstacle_width, obstacle["limit"]), 5)
-
-            if bird_x + bird_size > obstacle["x"] and bird_x < obstacle["x"] + obstacle_width:
-                if bird_y < obstacle["limit"] or bird_y > obstacle["limit"] + obstacle_gap:
-                    reset_game()
-
-        pygame.draw.rect(screen, BLACK, (bird_x, bird_y, bird_size, bird_size))
-
-        if current_question < 5:
-            question, _, _ = get_question_and_answers(current_question)
-            draw_text(question, font, BLACK, screen, 20, 20)
-
+        screen.fill(BLACK)
+        screen.blit(images[current_scene], (0, 0))
+        draw_text(screen, history[current_scene]["text"], font, WHITE, 20, 20, SCREEN_WIDTH - 40)
         pygame.display.update()
-        clock.tick(30)
+        
 
 if __name__ == "__main__":
     main()
