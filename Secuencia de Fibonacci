@@ -1,0 +1,10 @@
+def fibonacci(n):
+    if n < 2:
+        return n
+    else:
+        return fibonacci(n-1) + fibonacci(n-2)
+
+limite = int(input("¿Hasta qué número deseas generar la secuencia de Fibonacci? "))
+
+for i in range(limite):
+    print(fibonacci(i))
